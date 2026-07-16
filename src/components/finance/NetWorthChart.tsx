@@ -76,7 +76,7 @@ export function NetWorthChart({ rows }: { rows: FinanceRow[] }) {
             </text>
           ) : null,
         )}
-        <path d={areaD} fill="var(--viz-s1)" opacity={0.1} />
+        <path d={areaD} fill="var(--viz-s1)" opacity={0.1} className="area-fade" />
         <path
           d={lineD}
           fill="none"
@@ -84,9 +84,19 @@ export function NetWorthChart({ rows }: { rows: FinanceRow[] }) {
           strokeWidth={2}
           strokeLinejoin="round"
           strokeLinecap="round"
+          pathLength={1}
+          className="line-draw"
         />
-        <circle cx={last[0]} cy={last[1]} r={5} fill="var(--viz-s1)" stroke="var(--surface)" strokeWidth={2} />
-        <text x={last[0] + 9} y={last[1] + 4} className="dlabel">
+        <circle
+          cx={last[0]}
+          cy={last[1]}
+          r={5}
+          fill="var(--viz-s1)"
+          stroke="var(--surface)"
+          strokeWidth={2}
+          className="endcap"
+        />
+        <text x={last[0] + 9} y={last[1] + 4} className="dlabel endcap">
           {eurCompact(rows[rows.length - 1].net)}
         </text>
         {activeIdx !== null && hovered && (

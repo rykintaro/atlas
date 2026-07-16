@@ -63,10 +63,17 @@ export function IncomeExpensesChart({ rows }: { rows: FinanceRow[] }) {
           const x0 = PAD.l + i * gw + (gw - inner) / 2;
           return (
             <g key={r.month}>
-              <path d={barPath(x0, y(0), bw, Math.max(y(0) - y(r.income), 1), 1)} fill="var(--viz-s1)" />
+              <path
+                d={barPath(x0, y(0), bw, Math.max(y(0) - y(r.income), 1), 1)}
+                fill="var(--viz-s1)"
+                className="bar-grow"
+                style={{ animationDelay: `${i * 45}ms` }}
+              />
               <path
                 d={barPath(x0 + bw + 2, y(0), bw, Math.max(y(0) - y(r.expenses), 1), 1)}
                 fill="var(--viz-s2)"
+                className="bar-grow"
+                style={{ animationDelay: `${i * 45 + 25}ms` }}
               />
             </g>
           );

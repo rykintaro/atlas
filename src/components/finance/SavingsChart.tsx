@@ -62,6 +62,8 @@ export function SavingsChart({ rows }: { rows: FinanceRow[] }) {
               key={r.month}
               d={barPath(cx - bw / 2, y(0), bw, h, r.saved >= 0 ? 1 : -1)}
               fill={r.saved >= 0 ? "var(--viz-s1)" : "var(--viz-neg)"}
+              className={r.saved >= 0 ? "bar-grow" : "bar-grow-down"}
+              style={{ animationDelay: `${i * 45}ms` }}
             />
           );
         })}

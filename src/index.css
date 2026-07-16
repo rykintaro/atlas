@@ -3,6 +3,7 @@
   --surface: #121212;
   --surface-2: #1a1a1a;
   --border: rgba(255, 255, 255, 0.09);
+  --border-hover: rgba(255, 255, 255, 0.18);
   --text: #f4f4f4;
   --muted: #8a8a8a;
   --faint: #555;
@@ -23,6 +24,7 @@
   --surface: #ffffff;
   --surface-2: #f0f0ee;
   --border: rgba(0, 0, 0, 0.1);
+  --border-hover: rgba(0, 0, 0, 0.22);
   --text: #111111;
   --muted: #777;
   --faint: #aaa;
@@ -109,7 +111,7 @@ header {
   font-size: 15px;
   display: grid;
   place-items: center;
-  transition: border-color 0.2s;
+  transition: border-color 0.2s, transform 0.15s ease;
 }
 
 .theme-btn:hover {
@@ -193,6 +195,12 @@ header {
   display: flex;
   flex-direction: column;
   min-width: 0;
+  transition: transform 0.25s ease, border-color 0.25s ease, background 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  border-color: var(--border-hover);
 }
 
 .card.span2 {
@@ -292,11 +300,17 @@ input[type="month"] {
   font-weight: 600;
   cursor: pointer;
   white-space: nowrap;
-  transition: opacity 0.2s;
+  transition: opacity 0.2s, transform 0.15s ease;
 }
 
 .btn:hover {
   opacity: 0.85;
+}
+
+.btn:active,
+.btn-ghost:active,
+.theme-btn:active {
+  transform: scale(0.96);
 }
 
 .btn-ghost {
@@ -308,7 +322,7 @@ input[type="month"] {
   font: inherit;
   font-size: 13px;
   cursor: pointer;
-  transition: border-color 0.2s, background 0.2s;
+  transition: border-color 0.2s, background 0.2s, transform 0.15s ease;
 }
 
 .btn-ghost:hover {
@@ -970,5 +984,294 @@ footer {
   header {
     flex-wrap: wrap;
     gap: 10px;
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes hero-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+    filter: blur(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+
+@keyframes pop {
+  0% {
+    transform: scale(0.7);
+  }
+  60% {
+    transform: scale(1.12);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes item-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes line-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes grow-y {
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+@keyframes breathe {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.72;
+  }
+}
+
+@keyframes intro-char {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+    filter: blur(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+
+@keyframes intro-line-grow {
+  to {
+    width: 220px;
+  }
+}
+
+@keyframes intro-out {
+  to {
+    opacity: 0;
+  }
+}
+
+.intro {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: var(--bg);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+
+.intro.out {
+  animation: intro-out 0.65s ease forwards;
+  pointer-events: none;
+}
+
+.intro-inner {
+  text-align: center;
+}
+
+.intro-word {
+  display: flex;
+  justify-content: center;
+  font-size: clamp(34px, 8vw, 64px);
+  font-weight: 700;
+  letter-spacing: 0.45em;
+  margin-left: 0.45em;
+}
+
+.intro-word span {
+  display: inline-block;
+  animation: intro-char 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.intro-line {
+  width: 0;
+  height: 1px;
+  background: var(--muted);
+  margin: 20px auto 18px;
+  animation: intro-line-grow 0.9s 0.55s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+.intro-sub {
+  color: var(--muted);
+  font-size: 11px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  animation: fade-in 0.7s 1s both;
+}
+
+.pre {
+  opacity: 0;
+}
+
+.enter header {
+  animation: rise 0.5s ease both;
+}
+
+.enter .hero .date {
+  animation: rise 0.6s 0.05s ease both;
+}
+
+.enter .hero h1 {
+  animation: hero-in 0.75s 0.12s ease both;
+}
+
+.enter .hero .quote {
+  animation: rise 0.6s 0.24s ease both;
+}
+
+.enter .stats .stat {
+  animation: rise 0.55s ease both;
+}
+
+.enter .stats .stat:nth-child(1) {
+  animation-delay: 0.26s;
+}
+
+.enter .stats .stat:nth-child(2) {
+  animation-delay: 0.32s;
+}
+
+.enter .stats .stat:nth-child(3) {
+  animation-delay: 0.38s;
+}
+
+.enter .stats .stat:nth-child(4) {
+  animation-delay: 0.44s;
+}
+
+.enter .grid > * {
+  animation: rise 0.6s ease both;
+}
+
+.enter .grid > *:nth-child(1) {
+  animation-delay: 0.38s;
+}
+
+.enter .grid > *:nth-child(2) {
+  animation-delay: 0.44s;
+}
+
+.enter .grid > *:nth-child(3) {
+  animation-delay: 0.5s;
+}
+
+.enter .grid > *:nth-child(4) {
+  animation-delay: 0.56s;
+}
+
+.enter .grid > *:nth-child(5) {
+  animation-delay: 0.62s;
+}
+
+.enter .grid > *:nth-child(6) {
+  animation-delay: 0.68s;
+}
+
+.enter .fin-head {
+  animation: rise 0.6s 0.46s ease both;
+}
+
+.enter footer {
+  animation: fade-in 0.8s 0.9s ease both;
+}
+
+.goal,
+.task,
+.habit,
+.note,
+.fin-table tbody tr {
+  animation: item-in 0.35s ease both;
+}
+
+.day-dot.on,
+.water-dot.on,
+.mood-btn.on {
+  animation: pop 0.25s ease;
+}
+
+.timer .time.running {
+  animation: breathe 2.4s ease-in-out infinite;
+}
+
+.viz-tip {
+  animation: fade-in 0.18s ease;
+}
+
+.chart .line-draw {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: line-draw 1.2s 0.15s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.chart .area-fade {
+  animation: fade-in 0.9s 0.7s both;
+}
+
+.chart .endcap {
+  animation: fade-in 0.5s 1.1s both;
+}
+
+.chart .bar-grow {
+  transform-box: fill-box;
+  transform-origin: center bottom;
+  animation: grow-y 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.chart .bar-grow-down {
+  transform-box: fill-box;
+  transform-origin: center top;
+  animation: grow-y 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+    transition-duration: 0.01ms !important;
   }
 }

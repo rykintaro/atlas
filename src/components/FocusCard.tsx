@@ -71,7 +71,7 @@ export function FocusCard() {
     <section className="card">
       <h2>Focus</h2>
       <div className="timer">
-        <div className="time">
+        <div className={`time ${running ? "running" : ""}`}>
           {minutes}:{seconds}
         </div>
         <div className="mode-lbl">{MODES[mode].label}</div>
