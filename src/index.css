@@ -938,6 +938,96 @@ input[type="month"] {
   margin-top: 20px;
 }
 
+.toasts {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  z-index: 40;
+}
+
+.toast {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 10px 12px 10px 16px;
+  box-shadow: var(--shadow);
+  font-size: 14px;
+  animation: rise 0.3s ease;
+  white-space: nowrap;
+}
+
+.toast-undo {
+  background: none;
+  border: none;
+  color: var(--text);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 2px 4px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.toast-undo:hover {
+  color: var(--muted);
+}
+
+.inline-edit {
+  display: flex;
+  flex: 1;
+  gap: 8px;
+  min-width: 0;
+}
+
+.inline-edit input {
+  flex: 1;
+  padding: 5px 10px;
+  font-size: 14px;
+}
+
+.note-edit textarea {
+  width: 100%;
+  resize: vertical;
+  min-height: 80px;
+}
+
+.note-edit-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.note-actions {
+  display: flex;
+  gap: 0;
+}
+
+.pin-btn.on {
+  color: var(--text);
+}
+
+.pin-btn.on:hover {
+  color: var(--muted);
+}
+
+.note-card.pinned {
+  border-color: var(--border-hover);
+}
+
+.clear-done {
+  margin-left: auto;
+  align-self: center;
+}
+
 .range-row {
   display: flex;
   gap: 6px;

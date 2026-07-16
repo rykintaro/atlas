@@ -1,6 +1,8 @@
 import { useState, type FormEvent } from "react";
 import { useApp } from "../../hooks/useAppState";
+import { useToast } from "../../hooks/useToast";
 import { monthLabel, todayKey } from "../../lib/date";
+import { insertAt } from "../../lib/collections";
 import { computeFinance, SAMPLE_FINANCE } from "../../lib/finance";
 import { eur } from "../../lib/money";
 import { uid } from "../../lib/storage";
@@ -8,6 +10,7 @@ import type { FinanceEntry } from "../../types";
 
 export function EntriesCard() {
   const { state, update } = useApp();
+  const { show } = useToast();
   const currentMonth = todayKey().slice(0, 7);
   const [month, setMonth] = useState(currentMonth);
   const [income, setIncome] = useState("");
@@ -37,8 +40,15 @@ export function EntriesCard() {
     setNet("");
   };
 
-  const remove = (id: string) =>
+  const remove = (id: string) => {
+    const index = state.finance.findIndex(f => f.id === id);
+    const entry = state.finance[index];
+    if (!entry) return;
     update(s => ({ ...s, finance: s.finance.filter(f => f.id !== id) }));
+    show(`Entry for ${monthLabel(entry.month, "long")} deleted`, () =>
+      update(s => ({ ...s, finance: insertAt(s.finance, index, entry) })),
+    );
+  };
 
   const loadSample = () =>
     update(s => ({

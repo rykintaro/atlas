@@ -1,6 +1,8 @@
 import { useState, type FormEvent } from "react";
 import { useApp } from "../hooks/useAppState";
+import { useToast } from "../hooks/useToast";
 import { addDays, DAY_NAMES, plural, startOfWeek, todayKey } from "../lib/date";
+import { insertAt } from "../lib/collections";
 import { uid } from "../lib/storage";
 import type { Habit } from "../types";
 
@@ -18,6 +20,7 @@ function streakOf(habit: Habit): number {
 
 export function HabitsCard() {
   const { state, update } = useApp();
+  const { show } = useToast();
   const [name, setName] = useState("");
 
   const monday = startOfWeek();
@@ -46,8 +49,15 @@ export function HabitsCard() {
       ),
     }));
 
-  const remove = (id: string) =>
+  const remove = (id: string) => {
+    const index = state.habits.findIndex(h => h.id === id);
+    const habit = state.habits[index];
+    if (!habit) return;
     update(s => ({ ...s, habits: s.habits.filter(h => h.id !== id) }));
+    show(`Habit deleted (${habit.days.length} check-ins)`, () =>
+      update(s => ({ ...s, habits: insertAt(s.habits, index, habit) })),
+    );
+  };
 
   return (
     <section className="card span2">

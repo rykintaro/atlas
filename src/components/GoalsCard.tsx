@@ -1,10 +1,18 @@
 import { useState, type FormEvent } from "react";
 import { useApp } from "../hooks/useAppState";
+import { useToast } from "../hooks/useToast";
 import { plural, todayKey } from "../lib/date";
+import { insertAt } from "../lib/collections";
 import { uid } from "../lib/storage";
 import type { Goal } from "../types";
 
 const CATEGORIES = ["Personal", "Health", "Career", "Finance", "Learning", "Relationships"];
+
+interface GoalDraft {
+  title: string;
+  cat: string;
+  deadline: string;
+}
 
 function DeadlineMeta({ goal }: { goal: Goal }) {
   if (!goal.deadline) return null;
@@ -22,9 +30,12 @@ function DeadlineMeta({ goal }: { goal: Goal }) {
 
 export function GoalsCard() {
   const { state, update } = useApp();
+  const { show } = useToast();
   const [title, setTitle] = useState("");
   const [cat, setCat] = useState(CATEGORIES[0]);
   const [deadline, setDeadline] = useState("");
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [draft, setDraft] = useState<GoalDraft>({ title: "", cat: CATEGORIES[0], deadline: "" });
 
   const goals = [...state.goals].sort(
     (a, b) => Number(a.progress >= 100) - Number(b.progress >= 100),
@@ -56,8 +67,37 @@ export function GoalsCard() {
       ),
     }));
 
-  const remove = (id: string) =>
+  const remove = (id: string) => {
+    const index = state.goals.findIndex(g => g.id === id);
+    const goal = state.goals[index];
+    if (!goal) return;
     update(s => ({ ...s, goals: s.goals.filter(g => g.id !== id) }));
+    show("Goal deleted", () =>
+      update(s => ({ ...s, goals: insertAt(s.goals, index, goal) })),
+    );
+  };
+
+  const startEdit = (goal: Goal) => {
+    setEditingId(goal.id);
+    setDraft({ title: goal.title, cat: goal.cat, deadline: goal.deadline ?? "" });
+  };
+
+  const cancelEdit = () => setEditingId(null);
+
+  const saveEdit = (e: FormEvent) => {
+    e.preventDefault();
+    const trimmed = draft.title.trim();
+    if (!trimmed || !editingId) return;
+    update(s => ({
+      ...s,
+      goals: s.goals.map(g =>
+        g.id === editingId
+          ? { ...g, title: trimmed, cat: draft.cat, deadline: draft.deadline || null }
+          : g,
+      ),
+    }));
+    cancelEdit();
+  };
 
   return (
     <section className="card span2">
@@ -92,30 +132,73 @@ export function GoalsCard() {
       {goals.length === 0 && <p className="empty">No goals yet — define your first one above.</p>}
       {goals.map(g => (
         <div className="goal" key={g.id}>
-          <div className="goal-head">
-            <span className={`goal-title ${g.progress >= 100 ? "done" : ""}`}>{g.title}</span>
-            <span className="goal-meta">
-              <span className="tag">{g.cat}</span>
-              <DeadlineMeta goal={g} />
-            </span>
-            <button className="icon-btn" onClick={() => remove(g.id)} title="Delete goal">
-              ✕
-            </button>
-          </div>
-          <div className="goal-bar-row">
-            <div className="bar">
-              <div style={{ width: `${g.progress}%` }} />
-            </div>
-            <span className="pct">{g.progress}%</span>
-            <span className="step-btns">
-              <button onClick={() => step(g.id, -10)} title="−10%">
-                −
+          {editingId === g.id ? (
+            <form className="row-form goal-edit" onSubmit={saveEdit}>
+              <input
+                type="text"
+                autoFocus
+                required
+                maxLength={120}
+                value={draft.title}
+                onChange={e => setDraft(d => ({ ...d, title: e.target.value }))}
+                onKeyDown={e => e.key === "Escape" && cancelEdit()}
+              />
+              <select
+                value={draft.cat}
+                onChange={e => setDraft(d => ({ ...d, cat: e.target.value }))}
+              >
+                {CATEGORIES.map(c => (
+                  <option key={c}>{c}</option>
+                ))}
+              </select>
+              <input
+                type="date"
+                value={draft.deadline}
+                onChange={e => setDraft(d => ({ ...d, deadline: e.target.value }))}
+              />
+              <button className="btn" type="submit">
+                Save
               </button>
-              <button onClick={() => step(g.id, 10)} title="+10%">
-                +
+              <button className="btn-ghost" type="button" onClick={cancelEdit}>
+                Cancel
               </button>
-            </span>
-          </div>
+            </form>
+          ) : (
+            <>
+              <div className="goal-head">
+                <span
+                  className={`goal-title ${g.progress >= 100 ? "done" : ""}`}
+                  onDoubleClick={() => startEdit(g)}
+                >
+                  {g.title}
+                </span>
+                <span className="goal-meta">
+                  <span className="tag">{g.cat}</span>
+                  <DeadlineMeta goal={g} />
+                </span>
+                <button className="icon-btn" onClick={() => startEdit(g)} title="Edit goal">
+                  ✎
+                </button>
+                <button className="icon-btn" onClick={() => remove(g.id)} title="Delete goal">
+                  ✕
+                </button>
+              </div>
+              <div className="goal-bar-row">
+                <div className="bar">
+                  <div style={{ width: `${g.progress}%` }} />
+                </div>
+                <span className="pct">{g.progress}%</span>
+                <span className="step-btns">
+                  <button onClick={() => step(g.id, -10)} title="−10%">
+                    −
+                  </button>
+                  <button onClick={() => step(g.id, 10)} title="+10%">
+                    +
+                  </button>
+                </span>
+              </div>
+            </>
+          )}
         </div>
       ))}
     </section>

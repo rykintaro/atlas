@@ -3,7 +3,9 @@ import type { View } from "../../hooks/useView";
 
 export function GlanceNotes({ onNavigate }: { onNavigate: (v: View) => void }) {
   const { state } = useApp();
-  const recent = state.notes.slice(0, 3);
+  const recent = [...state.notes]
+    .sort((a, b) => Number(b.pinned ?? false) - Number(a.pinned ?? false))
+    .slice(0, 3);
 
   return (
     <section className="card">

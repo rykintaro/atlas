@@ -31,6 +31,8 @@ export interface Note {
   id: string;
   body: string;
   created: string;
+  updated?: string;
+  pinned?: boolean;
 }
 
 export interface FinanceEntry {

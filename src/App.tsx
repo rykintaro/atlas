@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { AppStateProvider } from "./hooks/useAppState";
 import { TimerProvider } from "./hooks/useTimer";
+import { ToastProvider } from "./hooks/useToast";
 import { useView } from "./hooks/useView";
 import { Header } from "./components/Header";
 import { Intro } from "./components/Intro";
@@ -36,23 +37,25 @@ export default function App() {
 
   return (
     <AppStateProvider>
-      <TimerProvider>
-        {phase !== "done" && (
-          <Intro leaving={phase === "leaving"} onSkip={() => setPhase("leaving")} />
-        )}
-        <div className={`wrap ${phase === "showing" ? "pre" : "enter"}`}>
-          <Header />
-          <Nav view={view} onNavigate={navigate} />
-          <div className="view" key={view}>
-            {view === "overview" && <OverviewView onNavigate={navigate} />}
-            {view === "goals" && <GoalsView />}
-            {view === "tasks" && <TasksView />}
-            {view === "notes" && <NotesView />}
-            {view === "finances" && <FinanceView />}
+      <ToastProvider>
+        <TimerProvider>
+          {phase !== "done" && (
+            <Intro leaving={phase === "leaving"} onSkip={() => setPhase("leaving")} />
+          )}
+          <div className={`wrap ${phase === "showing" ? "pre" : "enter"}`}>
+            <Header />
+            <Nav view={view} onNavigate={navigate} />
+            <div className="view" key={view}>
+              {view === "overview" && <OverviewView onNavigate={navigate} />}
+              {view === "goals" && <GoalsView />}
+              {view === "tasks" && <TasksView />}
+              {view === "notes" && <NotesView />}
+              {view === "finances" && <FinanceView />}
+            </div>
+            <footer>ATLAS — All data stays local in this browser.</footer>
           </div>
-          <footer>ATLAS — All data stays local in this browser.</footer>
-        </div>
-      </TimerProvider>
+        </TimerProvider>
+      </ToastProvider>
     </AppStateProvider>
   );
 }
