@@ -25,8 +25,15 @@ export function FinanceSection() {
 
   return (
     <>
-      <section className="fin-head">
-        <h2 className="section-title">Finances</h2>
+      <div className="view-head">
+        <div>
+          <h1 className="view-title">Finances</h1>
+          <p className="view-sub">
+            {state.finance.length
+              ? `${state.finance.length} monthly entries`
+              : "Track income, spending and net worth"}
+          </p>
+        </div>
         <div className="range-row">
           {RANGES.map(r => (
             <button
@@ -38,7 +45,7 @@ export function FinanceSection() {
             </button>
           ))}
         </div>
-      </section>
+      </div>
       <FinanceKpis rows={rows} />
       <div className="grid fin-grid">
         <section className="card span2 chart-card">

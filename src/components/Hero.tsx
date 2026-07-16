@@ -16,7 +16,7 @@ export function Hero() {
   return (
     <section className="hero">
       <div className="date">{fmtDate(now)}</div>
-      <h1>{greetingFor(now.getHours())}, Ali.</h1>
+      <h1>{greetingFor(now.getHours())}, X.</h1>
       <p className="quote">
         “{quote}” — <b>{author}</b>
       </p>

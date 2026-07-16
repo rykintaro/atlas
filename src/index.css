@@ -764,21 +764,178 @@ input[type="month"] {
   gap: 9px;
 }
 
-.fin-head {
+.tabs {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  gap: 2px;
+  margin-top: 4px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.tab {
+  position: relative;
+  background: none;
+  border: none;
+  color: var(--muted);
+  padding: 13px 14px;
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color 0.2s;
+}
+
+.tab:hover {
+  color: var(--text);
+}
+
+.tab.active {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.tab::after {
+  content: "";
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  bottom: -1px;
+  height: 2px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transition: transform 0.25s ease;
+}
+
+.tab.active::after {
+  transform: scaleX(1);
+}
+
+.tab-count {
+  margin-left: 7px;
+  font-size: 11px;
+  color: var(--faint);
+  font-variant-numeric: tabular-nums;
+}
+
+.view {
+  animation: rise 0.35s ease both;
+}
+
+.view-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+  padding: 38px 0 22px;
+}
+
+.view-title {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 30px;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+
+.view-sub {
+  color: var(--muted);
+  font-size: 13px;
+  margin-top: 2px;
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.link-btn {
+  background: none;
+  border: none;
+  color: var(--muted);
+  font: inherit;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  padding: 0;
+  transition: color 0.2s;
+}
+
+.link-btn:hover {
+  color: var(--text);
+}
+
+.glance-note {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.search {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 10px;
+  padding: 9px 14px;
+  font: inherit;
+  font-size: 14px;
+  outline: none;
+  width: 240px;
+  transition: border-color 0.2s;
+}
+
+.search:focus {
+  border-color: var(--muted);
+}
+
+.composer {
+  margin-bottom: 14px;
+}
+
+.composer .note-form {
+  margin-bottom: 0;
+}
+
+.notes-columns {
+  columns: 2 320px;
+  column-gap: 14px;
+}
+
+.note-card {
+  break-inside: avoid;
+  margin-bottom: 14px;
+  padding: 18px 20px;
+}
+
+.note-card .n-body {
+  font-size: 14px;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.note-card-foot {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin: 46px 0 18px;
-  padding-bottom: 12px;
-  border-bottom: 1px solid var(--border);
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
 }
 
-.section-title {
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--muted);
+.load-more {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
 }
 
 .range-row {
@@ -1210,12 +1367,28 @@ footer {
   animation-delay: 0.68s;
 }
 
-.enter .fin-head {
-  animation: rise 0.6s 0.46s ease both;
+.enter .tabs {
+  animation: rise 0.5s 0.06s ease both;
+}
+
+.enter .view-head {
+  animation: rise 0.55s 0.1s ease both;
 }
 
 .enter footer {
   animation: fade-in 0.8s 0.9s ease both;
+}
+
+.enter .stack > * {
+  animation: rise 0.55s ease both;
+}
+
+.enter .stack > *:nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+.enter .notes-columns .note-card {
+  animation: rise 0.45s 0.08s ease both;
 }
 
 .goal,
