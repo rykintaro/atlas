@@ -1,11 +1,12 @@
 import { useApp } from "../hooks/useAppState";
 import { useCountUp } from "../hooks/useCountUp";
 import { todayKey } from "../lib/date";
+import { goalProgress } from "../lib/goals";
 
 export function OverviewStats() {
   const { state } = useApp();
   const today = todayKey();
-  const activeGoals = useCountUp(state.goals.filter(g => g.progress < 100).length);
+  const activeGoals = useCountUp(state.goals.filter(g => goalProgress(g) < 100).length);
   const openTasks = useCountUp(state.tasks.filter(t => !t.done).length);
   const habitsDone = useCountUp(state.habits.filter(h => h.days.includes(today)).length);
   const focusToday = useCountUp(state.focus.date === today ? state.focus.count : 0);

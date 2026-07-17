@@ -1,5 +1,6 @@
 import { useApp } from "../hooks/useAppState";
 import { addDays, plural, todayKey } from "../lib/date";
+import { goalProgress } from "../lib/goals";
 
 const MOODS = ["Rough", "Low", "Okay", "Good", "Great"];
 const WATER_MAX = 8;
@@ -44,7 +45,7 @@ export function TodayCard() {
   const dueSoon = state.goals.filter(
     g =>
       g.deadline &&
-      g.progress < 100 &&
+      goalProgress(g) < 100 &&
       (new Date(g.deadline).getTime() - new Date(today).getTime()) / 86400000 <= 7,
   ).length;
 

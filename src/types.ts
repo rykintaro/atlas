@@ -3,6 +3,13 @@ export type Priority = "high" | "medium" | "low";
 export type TaskFilter = "all" | "open" | "done";
 export type FinanceRange = "6" | "12" | "all";
 export type TimerMode = "focus" | "short" | "long";
+export type GoalSort = "deadline" | "progress" | "created";
+
+export interface Milestone {
+  id: string;
+  title: string;
+  done: boolean;
+}
 
 export interface Goal {
   id: string;
@@ -11,6 +18,8 @@ export interface Goal {
   deadline: string | null;
   progress: number;
   created: string;
+  note?: string;
+  milestones?: Milestone[];
 }
 
 export interface Task {
@@ -25,6 +34,7 @@ export interface Habit {
   id: string;
   name: string;
   days: string[];
+  target?: number;
 }
 
 export interface Note {
@@ -60,4 +70,6 @@ export interface AppState {
   finance: FinanceEntry[];
   financeRange: FinanceRange;
   taskFilter: TaskFilter;
+  goalFilter: string;
+  goalSort: GoalSort;
 }

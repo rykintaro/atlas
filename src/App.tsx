@@ -8,6 +8,7 @@ import { Intro } from "./components/Intro";
 import { Nav } from "./components/Nav";
 import { OverviewView } from "./views/OverviewView";
 import { GoalsView } from "./views/GoalsView";
+import { HabitsView } from "./views/HabitsView";
 import { TasksView } from "./views/TasksView";
 import { NotesView } from "./views/NotesView";
 import { FinanceView } from "./views/FinanceView";
@@ -49,6 +50,7 @@ export default function App() {
             <div className="view" key={view}>
               {view === "overview" && <OverviewView onNavigate={navigate} />}
               {view === "goals" && <GoalsView />}
+              {view === "habits" && <HabitsView />}
               {view === "tasks" && <TasksView />}
               {view === "notes" && <NotesView />}
               {view === "finances" && <FinanceView />}

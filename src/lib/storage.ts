@@ -16,6 +16,8 @@ export function defaultState(): AppState {
     finance: [],
     financeRange: "12",
     taskFilter: "all",
+    goalFilter: "all",
+    goalSort: "deadline",
   };
 }
 

@@ -1,17 +1,13 @@
 import { useApp } from "../../hooks/useAppState";
 import type { View } from "../../hooks/useView";
+import { goalPace, goalProgress, sortGoals } from "../../lib/goals";
 
 export function GlanceGoals({ onNavigate }: { onNavigate: (v: View) => void }) {
   const { state } = useApp();
-  const active = state.goals
-    .filter(g => g.progress < 100)
-    .sort((a, b) => {
-      if (a.deadline && b.deadline) return a.deadline < b.deadline ? -1 : 1;
-      if (a.deadline) return -1;
-      if (b.deadline) return 1;
-      return b.progress - a.progress;
-    })
-    .slice(0, 4);
+  const active = sortGoals(
+    state.goals.filter(g => goalProgress(g) < 100),
+    "deadline",
+  ).slice(0, 4);
 
   return (
     <section className="card span2">
@@ -24,22 +20,30 @@ export function GlanceGoals({ onNavigate }: { onNavigate: (v: View) => void }) {
       {active.length === 0 && (
         <p className="empty">No active goals — create your first one under Goals.</p>
       )}
-      {active.map(g => (
-        <div className="goal" key={g.id}>
-          <div className="goal-head">
-            <span className="goal-title">{g.title}</span>
-            <span className="goal-meta">
-              <span className="tag">{g.cat}</span>
-            </span>
-          </div>
-          <div className="goal-bar-row">
-            <div className="bar">
-              <div style={{ width: `${g.progress}%` }} />
+      {active.map(g => {
+        const progress = goalProgress(g);
+        const pace = goalPace(g);
+        return (
+          <div className="goal" key={g.id}>
+            <div className="goal-head">
+              <span className="goal-title">{g.title}</span>
+              <span className="goal-meta">
+                <span className="tag">{g.cat}</span>
+                {pace && <span className={`pace ${pace.status}`}>{pace.status.replace("-", " ")}</span>}
+              </span>
             </div>
-            <span className="pct">{g.progress}%</span>
+            <div className="goal-bar-row">
+              <div className="bar">
+                <div style={{ width: `${progress}%` }} />
+                {pace && pace.expected > 2 && pace.expected < 98 && (
+                  <span className="bar-pace" style={{ left: `${pace.expected}%` }} />
+                )}
+              </div>
+              <span className="pct">{progress}%</span>
+            </div>
           </div>
-        </div>
-      ))}
+        );
+      })}
     </section>
   );
 }
