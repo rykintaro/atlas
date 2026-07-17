@@ -42,6 +42,7 @@ export default function App() {
           {phase !== "done" && (
             <Intro leaving={phase === "leaving"} onSkip={() => setPhase("leaving")} />
           )}
+          <div className="ambient" aria-hidden="true" />
           <div className={`wrap ${phase === "showing" ? "pre" : "enter"}`}>
             <Header />
             <Nav view={view} onNavigate={navigate} />

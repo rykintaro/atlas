@@ -16,15 +16,26 @@ export function FocusCard() {
   const minutes = String(Math.floor(remaining / 60)).padStart(2, "0");
   const seconds = String(remaining % 60).padStart(2, "0");
   const sessionsToday = state.focus.date === todayKey() ? state.focus.count : 0;
+  const total = TIMER_MODES[mode].minutes * 60;
+  const pct = ((total - remaining) / total) * 100;
 
   return (
     <section className="card">
       <h2>Focus</h2>
       <div className="timer">
-        <div className={`time ${running ? "running" : ""}`}>
-          {minutes}:{seconds}
+        <div
+          className="timer-ring"
+          style={{ background: `conic-gradient(var(--text) ${pct}%, var(--surface-2) 0)` }}
+        >
+          <div className="timer-ring-inner">
+            <div>
+              <div className={`time ${running ? "running" : ""}`}>
+                {minutes}:{seconds}
+              </div>
+              <div className="mode-lbl">{TIMER_MODES[mode].label}</div>
+            </div>
+          </div>
         </div>
-        <div className="mode-lbl">{TIMER_MODES[mode].label}</div>
       </div>
       <div className="timer-modes">
         {MODE_TABS.map(m => (

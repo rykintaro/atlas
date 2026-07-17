@@ -107,6 +107,13 @@ export function EntriesCard() {
       ) : (
         <div className="fin-table-wrap">
           <table className="fin-table">
+            <colgroup>
+              <col style={{ width: "24%" }} />
+              <col style={{ width: "24%" }} />
+              <col style={{ width: "24%" }} />
+              <col style={{ width: "20%" }} />
+              <col style={{ width: "8%" }} />
+            </colgroup>
             <thead>
               <tr>
                 <th>Month</th>
@@ -119,7 +126,7 @@ export function EntriesCard() {
             <tbody>
               {entries.map(e => (
                 <tr key={e.id}>
-                  <td>{monthLabel(e.month, "long")}</td>
+                  <td>{monthLabel(e.month, "year")}</td>
                   <td>{eur(e.income)}</td>
                   <td>{eur(e.expenses)}</td>
                   <td>{eur(netByMonth.get(e.month) ?? 0)}</td>
